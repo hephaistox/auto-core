@@ -1,5 +1,5 @@
 {:deps {io.github.hephaistox/auto-build
-          {:git/sha "ce9525bd238ae0a8fcc4b6a82a2987cefc1ab5ff"}},
+          {:sha "31570de04c557d4f2aea7df5e5409c4977474abc"}},
  :paths ["src"],
  :tasks
    {-base-deps {:doc "Dependencies for a task using bb"},
@@ -29,6 +29,13 @@
                                                       "clj-test-runner"
                                                       (current-task))
                              exit)},
+    cljs-browser-test
+      {:doc "Test with cljs in browser",
+       :requires [[auto-build.tasks.cljs-browser-test :refer [browser-test]]
+                  [auto-build.echo :refer [level1-header]]],
+       :task (some->> ["browser-test"]
+                      (browser-test level1-header "." (current-task))
+                      exit)},
     cljs-test {:doc "Test with cljs",
                :requires [[auto-build.tasks.cljs-test :as build-cljs-test]
                           [auto-build.echo :refer [level1-header]]],
