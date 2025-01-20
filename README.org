@@ -9,7 +9,7 @@
 [[https://github.com/hephaistox/hephaistox/wiki][https://img.shields.io/badge/wiki-hephaistox-blue.svg]] [[https://github.com/hephaistox/auto-core/wiki][https://img.shields.io/badge/wiki-project-blue.svg]] [[https://github.com/hephaistox/auto-core/discussions][https://img.shields.io/badge/discussions-blue.svg]]
 [[https://hephaistox.github.io/auto-core/][https://img.shields.io/badge/api-blue.svg]]
 
-Automaton core
+`auto-core`
 
 [[file:docs/img/automaton_small_duck.png]]
 
