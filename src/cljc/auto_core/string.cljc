@@ -1,4 +1,4 @@
-(ns auto-core.utils.string "String manipulation usable both in clj and cljs")
+(ns auto-core.string "String manipulation usable both in clj and cljs")
 
 (defn remove-last-character
   "Remove the last character of a string"

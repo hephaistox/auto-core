@@ -57,4 +57,4 @@ jobs:
       - name: print infos just for debugging, and the logs
         run: bb heph-info
       - name: test auto-core code in clojure
-        run: bb clj-test test-bb test-unit -v
+        run: bb clj-test test-clj -v
