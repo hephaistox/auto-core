@@ -19,7 +19,7 @@
     clj-test {:doc "Test with clj",
               :requires [[auto-build.tasks.clj-test :as build-clj-test]
                          [auto-build.echo :refer [level1-header]]],
-              :task (some->> ["test-bb" "test-unit"]
+              :task (some->> ["test-clj"]
                              (build-clj-test/clj-test level1-header
                                                       "."
                                                       "clj-test-runner"
