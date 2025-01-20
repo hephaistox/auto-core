@@ -58,3 +58,5 @@ jobs:
         run: bb heph-info
       - name: test auto-core code in clojure
         run: bb clj-test test-clj -v
+      - name: test auto-core code in clojurescript
+        run: bb cljs-test all -v

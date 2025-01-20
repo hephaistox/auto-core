@@ -7,7 +7,7 @@
   * [Clojurescript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)
 
   Have an objective to have a seamless access to regular expressions between cljs and clj"
-  #?(:cljs (:require [auto-core.adapters.string :as core-string])))
+  #?(:cljs (:require [auto-core.string :as core-string])))
 
 (def starts-a-string
   "Regular expression for the start of the input string. (the whole input and not the line)"

@@ -1,4 +1,5 @@
-{:deps {org.clojars.hephaistox/auto-build {:mvn/version "0.0.3"}},
+{:deps {io.github.hephaistox/auto-build
+          {:git/sha "ce9525bd238ae0a8fcc4b6a82a2987cefc1ab5ff"}},
  :paths ["src"],
  :tasks
    {-base-deps {:doc "Dependencies for a task using bb"},
@@ -14,6 +15,9 @@
                         (binding [*command-line-args* (conj *command-line-args*
                                                             "all")]
                           (run 'clj-test))
+                        (binding [*command-line-args* (conj *command-line-args*
+                                                            "all")]
+                          (run 'cljs-test))
                         auto-build.os.exit-codes/ok)
                     System/exit))},
     clj-test {:doc "Test with clj",
@@ -25,6 +29,14 @@
                                                       "clj-test-runner"
                                                       (current-task))
                              exit)},
+    cljs-test {:doc "Test with cljs",
+               :requires [[auto-build.tasks.cljs-test :as build-cljs-test]
+                          [auto-build.echo :refer [level1-header]]],
+               :task (some->> ["ltest"]
+                              (build-cljs-test/node-test level1-header
+                                                         "."
+                                                         (current-task))
+                              exit)},
     deploy {:doc "Deploy",
             :requires [[auto-build.tasks.deploy :as task-deploy]
                        [auto-build.echo :refer [level1-header]]],
