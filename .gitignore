@@ -11,5 +11,9 @@
 **.iml
 **/**.iml
 
+node-modules
+.shadow-cljs
+
 docs/wiki/
 docs/codox/
+target
