@@ -11,7 +11,7 @@
 **.iml
 **/**.iml
 
-node-modules
+node_modules
 .shadow-cljs
 
 docs/wiki/
