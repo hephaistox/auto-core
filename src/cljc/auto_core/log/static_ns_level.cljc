@@ -7,9 +7,10 @@
   * All selected lines could then decide on runtime if there are needed or not. For instance log4j2 logger could use its own parameters to update dynamically which one is used or not
 
   See `auto-core.log.strategy.static-ns-level/ns-rules` for rule definition details "
-  (:require [auto-core.log.log-levels :as log-levels]
-            [auto-core.log.registry :as log-registry]
-            [auto-core.log.strategy :as log-strategy]))
+  (:require
+   [auto-core.log.log-levels :as log-levels]
+   [auto-core.log.registry   :as log-registry]
+   [auto-core.log.strategy   :as log-strategy]))
 
 (def ns-rules
   "Decides the level of log depending on namespace
@@ -25,38 +26,42 @@
   * `max-level` - is the maximum expected log level to be printed (so all below or equal log levels are printed). The levels above the max-level are silenced. Not providing that value means only min-level is accepted or if it's also not set all levels.
   * `:logger` - seq of loggers ids to apply, loggers themselves are defined later on, in clj and cljs sides as their implementation depends on the technology most of the time.
 "
-  [{:rule-id :default,
-    :env :production,
-    :min-level :trace,
-    :max-level :warn,
+  [{:rule-id :default
+    :env :production
+    :min-level :trace
+    :max-level :warn
     :logger ::log-registry/error-tracking-context}
-   {:rule-id :default,
-    :env :production,
-    :min-level :error,
+   {:rule-id :default
+    :env :production
+    :min-level :error
     :logger ::log-registry/error-tracking-alert}
-   {:rule-id :default, :logger ::log-registry/text-based, :min-level :info}
-   {:rule-id :monorepo-app,
-    :re #"monorepo-app.*",
-    :min-level :info,
+   {:rule-id :default
+    :logger ::log-registry/text-based
+    :min-level :info}
+   {:rule-id :monorepo-app
+    :re #"monorepo-app.*"
+    :min-level :info
     :logger ::log-registry/print}
-   {:rule-id :ac-edn-utils,
-    :re #"auto-core.adapters.edn-utils",
-    :min-level :info,
+   {:rule-id :ac-edn-utils
+    :re #"auto-core.adapters.edn-utils"
+    :min-level :info
     :logger ::log-registry/text-based}
-   {:rule-id :aw-duplex-messages,
-    :re #"auto-web.duplex.message-handler",
-    :min-level :info,
+   {:rule-id :aw-duplex-messages
+    :re #"auto-web.duplex.message-handler"
+    :min-level :info
     :logger ::log-registry/text-based}
-   {:rule-id :log-http,
-    :re #"auto-web.middleware.log-http",
-    :min-level :info,
+   {:rule-id :log-http
+    :re #"auto-web.middleware.log-http"
+    :min-level :info
     :logger ::log-registry/text-based}])
 
 (defn apply-ns-rule
   "If `ns` match the regular expression `re` then return a vector with:
   * the minimum level required to display that message
   * a description of the rule as a second parameter (useful for tracing the decision if log are needed)"
-  [ns {:keys [re], :as rule}]
+  [ns
+   {:keys [re]
+    :as rule}]
   (when re (when (re-find re (str ns)) rule)))
 
 (defn- filter-rules-default-loggers
@@ -79,18 +84,14 @@
   "Returns coll1 rules that doesn't have a logger in rules from coll2"
   [coll1 coll2]
   (filter (fn [coll1-rule]
-            (every? (fn [coll2-rule]
-                      (not= (:logger coll1-rule) (:logger coll2-rule)))
-                    coll2))
-    coll1))
+            (every? (fn [coll2-rule] (not= (:logger coll1-rule) (:logger coll2-rule))) coll2))
+          coll1))
 
 (defn- rules-seq-loggers
   "Returns vector of loggers from sequences with rules.
    If there is no rules with loggers, returns empty vector."
   [& rules-seq]
-  (reduce (fn [loggers rule] (conj loggers (:logger rule)))
-    []
-    (into [] (apply concat rules-seq))))
+  (reduce (fn [loggers rule] (conj loggers (:logger rule))) [] (into [] (apply concat rules-seq))))
 
 (defn filter-rules-by-env
   [rules env]
@@ -98,10 +99,10 @@
 
 (defn filter-rules-by-level
   [rules level]
-  (filter #(log-levels/execute-level? {:min-level (:min-level %),
-                                       :max-level (:max-level %),
+  (filter #(log-levels/execute-level? {:min-level (:min-level %)
+                                       :max-level (:max-level %)
                                        :level level})
-    rules))
+          rules))
 
 (defrecord StaticNsLevelStrategy [config ns-rules]
   log-strategy/Strategy
@@ -114,13 +115,10 @@
             matching-ns-rules (-> ns-rules
                                   (filter-rules-by-ns ns)
                                   filter-rules-by-unique-loggers)
-            default-loggers-rules-kept (filter-rules-loggers-not-in
-                                         default-loggers-rules-accepted
-                                         matching-ns-rules)
-            matching-ns-rules-kept (filter-rules-by-level matching-ns-rules
-                                                          level)
-            loggers (rules-seq-loggers default-loggers-rules-kept
-                                       matching-ns-rules-kept)
+            default-loggers-rules-kept (filter-rules-loggers-not-in default-loggers-rules-accepted
+                                                                    matching-ns-rules)
+            matching-ns-rules-kept (filter-rules-by-level matching-ns-rules level)
+            loggers (rules-seq-loggers default-loggers-rules-kept matching-ns-rules-kept)
             loggers* (if (empty? loggers) [::log-registry/no-op] loggers)]
         loggers*))
     (rule-ids [_]

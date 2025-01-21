@@ -2,10 +2,11 @@
   "Validate the data against the schema.
 
   Is a proxy for malli"
-  (:require [malli.core :as malli]
-            [malli.error :as malli-error]
-            [malli.transform :as malli-transform]
-            [malli.util :as malli-util]))
+  (:require
+   [malli.core      :as malli]
+   [malli.error     :as malli-error]
+   [malli.transform :as malli-transform]
+   [malli.util      :as malli-util]))
 
 (def registry (merge (malli/default-schemas) (malli-util/schemas)))
 
@@ -15,9 +16,7 @@
   (update map-schema
           1
           (fn [schema-params]
-            (if (map? schema-params)
-              (assoc schema-params :closed true)
-              schema-params))))
+            (if (map? schema-params) (assoc schema-params :closed true) schema-params))))
 
 (defn validate-data
   "Return true if the data is matching the schema
@@ -41,8 +40,8 @@
                 (validate-data data))
     {:error (-> (malli/explain schema data)
                 malli-error/with-spell-checking
-                malli-error/humanize),
-     :schema schema,
+                malli-error/humanize)
+     :schema schema
      :data data}))
 
 (defn validate
@@ -78,5 +77,5 @@
   [schema data]
   (malli/decode schema
                 data
-                (malli-transform/default-value-transformer
-                  {::malli-transform/add-optional-keys true})))
+                (malli-transform/default-value-transformer {::malli-transform/add-optional-keys
+                                                            true})))
