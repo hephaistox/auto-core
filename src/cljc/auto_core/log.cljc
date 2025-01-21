@@ -11,19 +11,17 @@
         * deciding to push code in cljc should not prevent to log
         * postponing the decision to host code in frontend or backend is an objective
      * Consequence:
-        * This namespace is the entrypoint for both clj and cljs implementations
-"
-  (:require [auto-core.configuration :as core-conf]
-            [auto-core.log.strategy :as log-strategy]
+        * This namespace is the entrypoint for both clj and cljs implementations"
+  (:require [auto-core.log.strategy :as log-strategy]
             [auto-core.log.static-ns-level :as log-static-ns-level]
+            [auto-core.env :refer [env]]
             #?(:clj [auto-core.log.be-log]
                :cljs [auto-core.log.fe-log]))
   #?(:cljs (:require-macros [auto-core.log])))
 
 (def stgy
   "Decides which strategy implementation to use for choosing the loggers."
-  (log-static-ns-level/make-static-ns-level-strategy
-    {:env (:env core-conf/configuration)}))
+  (log-static-ns-level/make-static-ns-level-strategy {:env env}))
 
 (defn cljs-env?
   "Take the &env from a macro, and tell whether we are expanding into cljs."
