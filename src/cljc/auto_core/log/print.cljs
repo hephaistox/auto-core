@@ -19,11 +19,8 @@ trace -> debug -> info -> warn -> error -> fatal"
     js/console.log))
 
 (defn log-fn
-  "
-  Params:
-  * ignored
+  "* ignored
   * `level`
-  * `message`
-  "
+  * `message`"
   [_ level & message]
   (let [logger (get-logger level)] (logger (str/join " " message))))

@@ -11,7 +11,7 @@
 (def strategies-registry
   "List of predefined strategies
   Look at clj and cljs implementations to have an understanding of that strategies implementation which may be different on both technologies.
-  For instance, `:text-based` will be based on log4j2 on backedn and console on frontend"
+  For instance, `:text-based` will be based on log4j2 on backend and console on frontend"
   {::log-registry/print {:description "Simple print"
                          :impl simple-print}
    ::log-registry/text-based
