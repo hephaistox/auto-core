@@ -1,6 +1,7 @@
 (ns auto-core.data.fixed-size-queue-test
-  (:require [auto-core.data.fixed-size-queue :as sut]
-            [clojure.test :refer [deftest is]]))
+  (:require
+   [auto-core.data.fixed-size-queue :as sut]
+   [clojure.test                    :refer [deftest is]]))
 
 (deftest fixed-size-queue-test
   (is (= [:c :b :a]

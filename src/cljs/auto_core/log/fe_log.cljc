@@ -1,8 +1,9 @@
 (ns auto-core.log.fe-log
   "Factory generating log function"
-  (:require [auto-core.log.fe-registry]
-            [auto-core.log.strategy]
-            [auto-core.log.static-ns-level])
+  (:require
+   [auto-core.log.fe-registry]
+   [auto-core.log.static-ns-level]
+   [auto-core.log.strategy])
   #?(:cljs (:require-macros [auto-core.log.fe-log])))
 
 (defn- logger-ids-to-logger-fns
@@ -12,8 +13,8 @@
                   (get-in #?(:cljs auto-core.log.fe-registry/strategies-registry
                              :clj {})
                           [logger-id :impl])))
-    []
-    logger-ids))
+          []
+          logger-ids))
 
 (defmacro log
   [logger-id level & message]

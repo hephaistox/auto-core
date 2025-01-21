@@ -1,9 +1,13 @@
-(ns auto-core.log.log-levels
-  "Defines the possible log levels and their sequence")
+(ns auto-core.log.log-levels "Defines the possible log levels and their sequence")
 
 (def levels-sequence
   "List error levels in our app, first is more detailed, last is least detailed"
-  {:trace 10, :debug 20, :info 30, :warn 40, :error 50, :fatal 60})
+  {:trace 10
+   :debug 20
+   :info 30
+   :warn 40
+   :error 50
+   :fatal 60})
 
 (defn execute-min-level?
   "Returns true if we decide to apply log to that levl regarding minimimum required
@@ -24,8 +28,9 @@
    If no `min-level` or `max-level` is supplied, only the other is taken into account.
    In all the other cases returns nil."
   [{:keys [min-level max-level level]}]
-  (cond (and min-level max-level) (and (execute-min-level? min-level level)
-                                       (execute-max-level? max-level level))
-        (some? min-level) (execute-min-level? min-level level)
-        (some? max-level) (execute-max-level? max-level level)
-        :else nil))
+  (cond
+    (and min-level max-level) (and (execute-min-level? min-level level)
+                                   (execute-max-level? max-level level))
+    (some? min-level) (execute-min-level? min-level level)
+    (some? max-level) (execute-max-level? max-level level)
+    :else nil))

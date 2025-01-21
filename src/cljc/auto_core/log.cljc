@@ -12,11 +12,12 @@
         * postponing the decision to host code in frontend or backend is an objective
      * Consequence:
         * This namespace is the entrypoint for both clj and cljs implementations"
-  (:require [auto-core.log.strategy :as log-strategy]
-            [auto-core.log.static-ns-level :as log-static-ns-level]
-            [auto-core.env :refer [env]]
-            #?(:clj [auto-core.log.be-log]
-               :cljs [auto-core.log.fe-log]))
+  (:require
+   [auto-core.env                 :refer [env]]
+   [auto-core.log.static-ns-level :as log-static-ns-level]
+   [auto-core.log.strategy        :as log-strategy]
+   #?(:clj [auto-core.log.be-log]
+      :cljs [auto-core.log.fe-log]))
   #?(:cljs (:require-macros [auto-core.log])))
 
 (def stgy
@@ -41,28 +42,16 @@
   [exception & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :trace)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-exception ~logger-id#
-                                           :trace
-                                           ~exception
-                                           ~@additional-message)
-      `(auto-core.log.be-log/log-exception ~logger-id#
-                                           :trace
-                                           ~exception
-                                           ~@additional-message))))
+      `(auto-core.log.fe-log/log-exception ~logger-id# :trace ~exception ~@additional-message)
+      `(auto-core.log.be-log/log-exception ~logger-id# :trace ~exception ~@additional-message))))
 
 (defmacro trace-data
   "Like trace, but first argument is expected to be a map with usefull more detailed data."
   [data & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :trace)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-data ~logger-id#
-                                      :trace
-                                      ~data
-                                      ~@additional-message)
-      `(auto-core.log.be-log/log-data ~logger-id#
-                                      :trace
-                                      ~data
-                                      ~@additional-message))))
+      `(auto-core.log.fe-log/log-data ~logger-id# :trace ~data ~@additional-message)
+      `(auto-core.log.be-log/log-data ~logger-id# :trace ~data ~@additional-message))))
 
 (defmacro trace-format
   "Like trace, but uses clojure format function, so first argument is string to translate and rest is arguments to supply it with."
@@ -85,28 +74,16 @@
   [exception & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :debug)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-exception ~logger-id#
-                                           :debug
-                                           ~exception
-                                           ~@additional-message)
-      `(auto-core.log.be-log/log-exception ~logger-id#
-                                           :debug
-                                           ~exception
-                                           ~@additional-message))))
+      `(auto-core.log.fe-log/log-exception ~logger-id# :debug ~exception ~@additional-message)
+      `(auto-core.log.be-log/log-exception ~logger-id# :debug ~exception ~@additional-message))))
 
 (defmacro debug-data
   "Like debug, but first argument is expected to be a map with usefull more detailed data."
   [data & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :debug)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-data ~logger-id#
-                                      :debug
-                                      ~data
-                                      ~@additional-message)
-      `(auto-core.log.be-log/log-data ~logger-id#
-                                      :debug
-                                      ~data
-                                      ~@additional-message))))
+      `(auto-core.log.fe-log/log-data ~logger-id# :debug ~data ~@additional-message)
+      `(auto-core.log.be-log/log-data ~logger-id# :debug ~data ~@additional-message))))
 
 (defmacro debug-format
   "Like debug, but uses clojure format function, so first argument is string to translate and rest is arguments to supply it with."
@@ -129,28 +106,16 @@
   [exception & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :info)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-exception ~logger-id#
-                                           :info
-                                           ~exception
-                                           ~@additional-message)
-      `(auto-core.log.be-log/log-exception ~logger-id#
-                                           :info
-                                           ~exception
-                                           ~@additional-message))))
+      `(auto-core.log.fe-log/log-exception ~logger-id# :info ~exception ~@additional-message)
+      `(auto-core.log.be-log/log-exception ~logger-id# :info ~exception ~@additional-message))))
 
 (defmacro info-data
   "Like info, but first argument is expected to be a map with usefull more detailed data."
   [data & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :info)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-data ~logger-id#
-                                      :info
-                                      ~data
-                                      ~@additional-message)
-      `(auto-core.log.be-log/log-data ~logger-id#
-                                      :info
-                                      ~data
-                                      ~@additional-message))))
+      `(auto-core.log.fe-log/log-data ~logger-id# :info ~data ~@additional-message)
+      `(auto-core.log.be-log/log-data ~logger-id# :info ~data ~@additional-message))))
 
 (defmacro info-format
   "Like info, but uses clojure format function, so first argument is string to translate and rest is arguments to supply it with."
@@ -173,28 +138,16 @@
   [exception & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :warn)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-exception ~logger-id#
-                                           :warn
-                                           ~exception
-                                           ~@additional-message)
-      `(auto-core.log.be-log/log-exception ~logger-id#
-                                           :warn
-                                           ~exception
-                                           ~@additional-message))))
+      `(auto-core.log.fe-log/log-exception ~logger-id# :warn ~exception ~@additional-message)
+      `(auto-core.log.be-log/log-exception ~logger-id# :warn ~exception ~@additional-message))))
 
 (defmacro warn-data
   "Like warn, but first argument is expected to be a map with usefull more detailed data."
   [data & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :warn)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-data ~logger-id#
-                                      :warn
-                                      ~data
-                                      ~@additional-message)
-      `(auto-core.log.be-log/log-data ~logger-id#
-                                      :warn
-                                      ~data
-                                      ~@additional-message))))
+      `(auto-core.log.fe-log/log-data ~logger-id# :warn ~data ~@additional-message)
+      `(auto-core.log.be-log/log-data ~logger-id# :warn ~data ~@additional-message))))
 
 (defmacro warn-format
   "Like warn, but uses clojure format function, so first argument is string to translate and rest is arguments to supply it with."
@@ -217,28 +170,16 @@
   [exception & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :error)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-exception ~logger-id#
-                                           :error
-                                           ~exception
-                                           ~@additional-message)
-      `(auto-core.log.be-log/log-exception ~logger-id#
-                                           :error
-                                           ~exception
-                                           ~@additional-message))))
+      `(auto-core.log.fe-log/log-exception ~logger-id# :error ~exception ~@additional-message)
+      `(auto-core.log.be-log/log-exception ~logger-id# :error ~exception ~@additional-message))))
 
 (defmacro error-data
   "Like error, but first argument is expected to be a map with usefull more detailed data."
   [data & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :error)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-data ~logger-id#
-                                      :error
-                                      ~data
-                                      ~@additional-message)
-      `(auto-core.log.be-log/log-data ~logger-id#
-                                      :error
-                                      ~data
-                                      ~@additional-message))))
+      `(auto-core.log.fe-log/log-data ~logger-id# :error ~data ~@additional-message)
+      `(auto-core.log.be-log/log-data ~logger-id# :error ~data ~@additional-message))))
 
 (defmacro error-format
   "Like error, but uses clojure format function, so first argument is string to translate and rest is arguments to supply it with."
@@ -261,28 +202,16 @@
   [exception & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :fatal)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-exception ~logger-id#
-                                           :fatal
-                                           ~exception
-                                           ~@additional-message)
-      `(auto-core.log.be-log/log-exception ~logger-id#
-                                           :fatal
-                                           ~exception
-                                           ~@additional-message))))
+      `(auto-core.log.fe-log/log-exception ~logger-id# :fatal ~exception ~@additional-message)
+      `(auto-core.log.be-log/log-exception ~logger-id# :fatal ~exception ~@additional-message))))
 
 (defmacro fatal-data
   "Like fatal, but first argument is expected to be a map with usefull more detailed data."
   [data & additional-message]
   (let [logger-id# (auto-core.log.strategy/apply-strategy stgy *ns* :fatal)]
     (if (cljs-env? &env)
-      `(auto-core.log.fe-log/log-data ~logger-id#
-                                      :fatal
-                                      ~data
-                                      ~@additional-message)
-      `(auto-core.log.be-log/log-data ~logger-id#
-                                      :fatal
-                                      ~data
-                                      ~@additional-message))))
+      `(auto-core.log.fe-log/log-data ~logger-id# :fatal ~data ~@additional-message)
+      `(auto-core.log.be-log/log-data ~logger-id# :fatal ~data ~@additional-message))))
 
 (defmacro fatal-format
   "Like fatal, but uses clojure format function, so first argument is string to translate and rest is arguments to supply it with."

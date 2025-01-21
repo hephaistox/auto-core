@@ -1,13 +1,13 @@
-(ns auto-core.numbers
-  "Helpers for manipulating numbers in the same way between clj and cljs")
+(ns auto-core.numbers "Helpers for manipulating numbers in the same way between clj and cljs")
 
 (defn check-val-in-range
   "Returns `nil` if `val` is in the range `[min;max[`.
   Otherwise, returns `val` itself."
   [min max val]
-  (cond (> min val) val
-        (<= max val) val
-        :else nil))
+  (cond
+    (> min val) val
+    (<= max val) val
+    :else nil))
 
 
 (defn check-vals-in-range

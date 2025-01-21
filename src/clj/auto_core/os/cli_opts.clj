@@ -2,11 +2,12 @@
   "Parse cli options.
 
   Proxy to [tools.cli](https://github.com/clojure/tools.cli)"
-  (:require [auto-core.os.exit-codes :as build-exit-codes]
-            [auto-core.echo.base :as build-base]
-            [clojure.string :as str]
-            [clojure.tools.cli :as tools-cli]
-            [clojure.set :as set]))
+  (:require
+   [auto-core.echo.base     :as build-base]
+   [auto-core.os.exit-codes :as build-exit-codes]
+   [clojure.set             :as set]
+   [clojure.string          :as str]
+   [clojure.tools.cli       :as tools-cli]))
 
 ;; ********************************************************************************
 ;; Private
@@ -17,7 +18,9 @@
 
 (defn- print-usage-msg
   "Returns the string for the summary of the task."
-  [{:keys [summary], :as _parsed-cli-opts} current-task-name]
+  [{:keys [summary]
+    :as _parsed-cli-opts}
+   current-task-name]
   (normalln "Usage: bb" current-task-name "[options]")
   (normalln)
   (normalln "Options:")
@@ -25,7 +28,10 @@
 
 (defn- print-usage-msg-with-args
   "Returns the string for the summary of the task."
-  [{:keys [summary], :as _parsed-cli-opts} current-task-name argument-name
+  [{:keys [summary]
+    :as _parsed-cli-opts}
+   current-task-name
+   argument-name
    argument-desc]
   (normalln "Usage: bb" current-task-name "[options]" argument-name)
   (normalln)
@@ -54,16 +60,12 @@
 
 (defn- print-help
   [cli-opts current-task-name]
-  (when (get-in cli-opts [:options :help])
-    (print-help-message cli-opts current-task-name)))
+  (when (get-in cli-opts [:options :help]) (print-help-message cli-opts current-task-name)))
 
 (defn- print-help-with-args
   [cli-opts current-task-name argument-name argument-desc]
   (when (get-in cli-opts [:options :help])
-    (print-usage-msg-with-args cli-opts
-                               current-task-name
-                               argument-name
-                               argument-desc)
+    (print-usage-msg-with-args cli-opts current-task-name argument-name argument-desc)
     build-exit-codes/ok))
 
 (defn- print-no-args-required
@@ -99,7 +101,9 @@
   ([cli-args cli-options] (tools-cli/parse-opts cli-args cli-options)))
 
 (defn- replace-all
-  [{:keys [arguments], :as cli-opts} arg-list]
+  [{:keys [arguments]
+    :as cli-opts}
+   arg-list]
   (cond-> cli-opts
     (contains? (set arguments) "all") (assoc :arguments arg-list)))
 
@@ -111,11 +115,11 @@
         arguments (set (:arguments parsed-cli-opts))
         valid-args (set/intersection arguments arg-list defined-args)]
     (assoc parsed-cli-opts
-      :defined-args defined-args
-      :arg-list arg-list
-      :valid-args valid-args
-      :not-defined-arg-list (set/difference arg-list defined-args)
-      :not-arg-list (set/difference arguments arg-list))))
+           :defined-args defined-args
+           :arg-list arg-list
+           :valid-args valid-args
+           :not-defined-arg-list (set/difference arg-list defined-args)
+           :not-arg-list (set/difference arguments arg-list))))
 
 ;; ********************************************************************************
 ;; entering functions
@@ -140,14 +144,10 @@
       (normalln "Warning: these arguments are skipped as they are not defined: "
                 (str/join ", " not-defined-arg-list)))
     (when-not (empty? not-arg-list)
-      (normalln
-        "Warning: these arguments are skipped as they are not part of the list: "
-        (str/join ", " not-arg-list)))
+      (normalln "Warning: these arguments are skipped as they are not part of the list: "
+                (str/join ", " not-arg-list)))
     (when (empty? valid-args)
-      (print-usage-msg-with-args cli-opts
-                                 current-task-name
-                                 argument-name
-                                 argument-desc)
+      (print-usage-msg-with-args cli-opts current-task-name argument-name argument-desc)
       build-exit-codes/invalid-argument)))
 
 (defn enter-args-in-a-list
@@ -160,15 +160,9 @@
   (let [argument-desc (apply str (concat ["["] (str/join "|" arg-list) ["]"]))
         current-task-name (:name current-task)]
     (or (print-verbose cli-opts)
-        (print-help-with-args cli-opts
-                              current-task-name
-                              argument-name
-                              argument-desc)
+        (print-help-with-args cli-opts current-task-name argument-name argument-desc)
         (print-error-message cli-opts current-task-name)
-        (print-arg-in-list cli-opts
-                           current-task-name
-                           argument-name
-                           argument-desc))))
+        (print-arg-in-list cli-opts current-task-name argument-name argument-desc))))
 
 (comment
  ;; For an example:

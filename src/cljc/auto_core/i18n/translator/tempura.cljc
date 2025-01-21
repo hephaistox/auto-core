@@ -3,17 +3,16 @@
 
   Is an adapter for translation in `automaton-core`, so no web related technology is mentionned there, even if tempura provides them.
   It will be the job of `automton-web` to provide that features"
-  (:require [auto-core.data.map :as utils-map]
-            [auto-core.i18n.translator :as core-translator]
-            [auto-core.log :as core-log]
-            [taoensso.tempura :as tempura]))
+  (:require
+   [auto-core.data.map        :as utils-map]
+   [auto-core.i18n.translator :as core-translator]
+   [auto-core.log             :as core-log]
+   [taoensso.tempura          :as tempura]))
 
 (def tempura-missing-text
   "Necessary for tempura,  a missing key is expected for all languages marked with `:core-dict?` in `automaton-core.i18n.language`"
-  {:en {:missing
-          "The text is missing! :( Please let us know at info@hephaistox.com"},
-   :fr
-     {:missing
+  {:en {:missing "The text is missing! :( Please let us know at info@hephaistox.com"}
+   :fr {:missing
         "Le texte est manquant! :( Veuillez nous en informer à l'adresse info@hephaistox.com"}})
 
 (defn- append-dictionaries
@@ -30,9 +29,9 @@
   [& dicts]
   (let [debug true ;; (= :dev (conf-core/read-param [:env]))
        ]
-    {:dict (append-dictionaries dicts),
-     :cache-dict? (not debug),
-     :default-local :fr,
+    {:dict (append-dictionaries dicts)
+     :cache-dict? (not debug)
+     :default-local :fr
      :cache-locales (not debug)}))
 
 (defrecord TempuraTranslator [opts main-langs]
