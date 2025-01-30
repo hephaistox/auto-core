@@ -57,6 +57,6 @@ jobs:
       - name: test code in clojure
         run: bb clj-test test-clj -v
       - name: test code in clojurescript
-        run: bb cljs-test all -v
+        run: bb cljs-node-test all -v
       - name: print infos just for debugging, and the logs
         run: bb heph-info
