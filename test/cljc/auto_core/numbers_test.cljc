@@ -1,8 +1,8 @@
 (ns auto-core.numbers-test
-  (:require [auto-core.numbers :as sut]
-            #?(:clj [clojure.test :refer [deftest is testing]]
-               :cljs [cljs.test :refer [deftest is testing] :include-macros
-                      true])))
+  (:require
+   [auto-core.numbers :as sut]
+   #?(:clj [clojure.test :refer [deftest is testing]]
+      :cljs [cljs.test :refer [deftest is testing] :include-macros true])))
 
 (deftest check-val-in-range-test
   (testing "In the range integer are accepted"

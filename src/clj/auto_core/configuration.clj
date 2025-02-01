@@ -1,5 +1,6 @@
 (ns auto-core.configuration
-  (:require [auto-core.os.edn-utils :as core-edn]))
+  (:require
+   [auto-core.os.edn-utils :as core-edn]))
 
 (def filename "run_config.edn")
 
@@ -10,9 +11,8 @@
   (load-config nil filename))
 
 (defn print-if-error
-  [{:keys [errorln uri-str], :as _printers}]
-  (errorln "Configuration file"
-           (uri-str (:afilepath configuration-filedesc))
-           "is not well setup"))
+  [{:keys [errorln uri-str]
+    :as _printers}]
+  (errorln "Configuration file" (uri-str (:afilepath configuration-filedesc)) "is not well setup"))
 
 (def configuration (:edn configuration-filedesc))

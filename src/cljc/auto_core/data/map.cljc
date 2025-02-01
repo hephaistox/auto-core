@@ -11,11 +11,9 @@
   This code comes from this [gist](https://gist.github.com/danielpcox/c70a8aa2c36766200a95)"
   [& maps]
   (apply merge-with
-    (fn [& args]
-      (if (every? #(or (map? %) (nil? %)) args)
-        (apply deep-merge args)
-        (last args)))
-    maps))
+         (fn [& args]
+           (if (every? #(or (map? %) (nil? %)) args) (apply deep-merge args) (last args)))
+         maps))
 
 (defn add-ids
   "For `mm` a map of map, turns `{:foo {}}` to `{:foo {:id :foo}}` so they key of the outer map is found in the inner one."
@@ -40,11 +38,11 @@
     (if-let [k (first ks)]
       (let [e1 (find m1 k)
             e2 (find m2 k)]
-        (cond (and e1 e2 (not= (e1 1) (e2 1))) (recur (assoc! m k (e1 1))
-                                                      (next ks))
-              (not e1) (recur (assoc! m k (e2 1)) (next ks))
-              (not e2) (recur (assoc! m k (e1 1)) (next ks))
-              :else (recur m (next ks))))
+        (cond
+          (and e1 e2 (not= (e1 1) (e2 1))) (recur (assoc! m k (e1 1)) (next ks))
+          (not e1) (recur (assoc! m k (e2 1)) (next ks))
+          (not e2) (recur (assoc! m k (e1 1)) (next ks))
+          :else (recur m (next ks))))
       (persistent! m))))
 
 

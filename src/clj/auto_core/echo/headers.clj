@@ -2,8 +2,9 @@
   "Prints text with headers on the terminal.
 
   Each content is modified to wrap the `width` of the terminal, and is modified to have a left margin."
-  (:require [auto-core.echo.base :as build-echo-base]
-            [auto-core.os.colorized-text :as build-text]))
+  (:require
+   [auto-core.echo.base         :as build-echo-base]
+   [auto-core.os.colorized-text :as build-text]))
 
 ;; ********************************************************************************
 ;; Private
@@ -41,11 +42,7 @@
   (pure-printing texts)
   (print build-text/font-default))
 
-(defn exceptionln
-  "Display exception `e`."
-  [e]
-  (errorln (ex-cause e))
-  (normalln (pr-str e)))
+(defn exceptionln "Display exception `e`." [e] (errorln (ex-cause e)) (normalln (pr-str e)))
 
 (defn print-cmd
   "Prints the execution of command string `cmd` with the `prefixs` added."
@@ -128,16 +125,16 @@
 (def printers
   "Printers for headers"
   (merge build-echo-base/printers
-         {:normalln normalln,
-          :errorln errorln,
-          :exceptionln exceptionln,
-          :print-cmd print-cmd,
-          :h1 h1,
-          :h2 h2,
-          :h3 h3,
-          :h1-valid h1-valid,
-          :h2-valid h2-valid,
-          :h3-valid h3-valid,
-          :h1-error h1-error,
-          :h2-error h2-error,
+         {:normalln normalln
+          :errorln errorln
+          :exceptionln exceptionln
+          :print-cmd print-cmd
+          :h1 h1
+          :h2 h2
+          :h3 h3
+          :h1-valid h1-valid
+          :h2-valid h2-valid
+          :h3-valid h3-valid
+          :h1-error h1-error
+          :h2-error h2-error
           :h3-error h3-error}))

@@ -8,8 +8,7 @@
 (defn idx-of-pred
   "Same as idx-of but with a predicate"
   [v pred]
-  (when (and pred (fn? pred))
-    (ffirst (filter #(pred (second %)) (map-indexed vector v)))))
+  (when (and pred (fn? pred)) (ffirst (filter #(pred (second %)) (map-indexed vector v)))))
 
 (defn trim-leading-nil
   "Remove `nil` values at the end of a sequence `s`"

@@ -1,6 +1,7 @@
 (ns auto-core.keyword
   "Utility functions for keywords"
-  (:require [clojure.string :as str]))
+  (:require
+   [clojure.string :as str]))
 
 (defn keywordize
   "Change string to appropriate clojure keyword"
