@@ -1,4 +1,4 @@
-{:deps {io.github.hephaistox/auto-build {:git/sha "e907e29f65049a805c5a33e2f60bbe838c268a1a"}}
+{:deps {io.github.hephaistox/auto-build {:git/sha "dd5f949add930adba45fc440bf18412a4069683c"}}
  :paths ["src"]
  :tasks
  {:init (do (def ^:dynamic exit System/exit))
