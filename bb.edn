@@ -1,10 +1,13 @@
-{:deps {io.github.hephaistox/auto-build {:git/sha "dd5f949add930adba45fc440bf18412a4069683c"}}
+{:deps {com.github.hephaistox/auto-build {:git/sha "c2da9180d515aa63b8a3edf769c6821938af602e"}}
  :paths ["src"]
  :tasks
- {:init (do (def ^:dynamic exit System/exit))
-  :requires [;;NOTE Should be as small as possible to ensure `lconnect`
-             ;;can start whatever the state of the code is.
-             [auto-build.os.exit-codes]]
+ {-uberjar {:doc "Uberjar"
+            :override-builtin true
+            :requires [[auto-build.tasks.uberjar :as build-uberjar]
+                       [auto-build.echo :refer [level1-header]]]
+            :task (-> (build-uberjar/uberjar level1-header "." "target/uberjar" "")
+                      exit)}
+  :requires [[auto-build.os.exit-codes] [auto-build.os.exiting :refer [exit]]]
   bp {:doc "Before push"
       :task (binding [exit (fn [exit-code & _] (when-not (zero? exit-code) exit-code))]
               (-> (or (run 'format)
@@ -18,7 +21,11 @@
   clean {:doc "Clean temporary files"
          :requires [[auto-build.tasks.clean :as task-clean]
                     [auto-build.echo :refer [level1-header]]]
-         :task (-> (task-clean/clean level1-header "." [".DS_Store"] [".cpcache"] (current-task))
+         :task (-> (task-clean/clean level1-header
+                                     "."
+                                     [".DS_Store"]
+                                     [".cpcache" ".shadow-cljs" "node_modules" "tmp" "target"]
+                                     (current-task))
                    exit)}
   clj-test
   {:doc "Test with clj"
@@ -49,18 +56,20 @@
         :task (do (shell "clj -M:antq") (shell "npm upgrade"))}
   docs {:doc "Docs"
         :requires [[auto-build.tasks.docs :as build-docs] [auto-build.echo :refer [level1-header]]]
-        :task (-> (build-docs/docs level1-header "." (current-task) "gh-pages")
+        :task (-> (build-docs/docs level1-header "." (current-task) "gh-pages" "codox")
                   exit)}
   format {:doc "Format"
           :requires [[auto-build.tasks.formatting :as task-format]
                      [auto-build.echo :refer [level1-header]]]
           :task (-> (task-format/format level1-header "." (current-task))
                     exit)}
+  gha {:doc "For github action tests"
+       :task (do (shell "bb clj-test test-clj -v") (shell "bb cljs-node-test all -v"))}
   heph-info {:doc "Hephaistox project info"
              :extra-paths ["env/dev/resources"]
              :requires [[auto-build.tasks.heph-info :as heph-info]
                         [auto-build.echo :refer [level1-header]]]
-             :task (-> (heph-info/heph-info level1-header (current-task))
+             :task (-> (heph-info/heph-info level1-header (current-task) ".")
                        exit)}
   lint {:doc "Lint"
         :requires [[auto-build.tasks.lint :as task-lint] [auto-build.echo :refer [level1-header]]]
@@ -69,11 +78,6 @@
   repl {:doc "Clojure repl"
         :override-builtin true
         :requires [[auto-build.tasks.repl :as build-repl] [auto-build.echo :refer [level1-header]]]
-        :task (-> (build-repl/repl level1-header "." (current-task))
-                  exit)}
-  uberjar {:doc "Uberjar"
-           :override-builtin true
-           :requires [[auto-build.tasks.uberjar :as build-uberjar]
-                      [auto-build.echo :refer [level1-header]]]
-           :task (-> (build-uberjar/uberjar level1-header "." "target/uberjar" "")
-                     exit)}}}
+        :task
+        (-> (build-repl/repl level1-header "." (current-task) [:build :cljs-deps :test-clj] 7002)
+            exit)}}}
