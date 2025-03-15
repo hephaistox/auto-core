@@ -20,8 +20,8 @@ If every tool, when ordered, or even of its own accord, could do the work that b
 
 * Main features
 - This project should be agnostic of any environment, so it should run on the following examples of technology: CLI, backend of web app, frontend of web app, Android frontend, Android backend, ...
-- Create cljc versions of features which are not naturally behaving the same between clj and cljs: uuids,
-- Data strucutre helpers : regular expression, strings, keywords, maps, sequences, uuids
+- Create cljc versions of features which are not naturally behaving the same between clj and cljs: uuids, utf8 text coloring, format, regexp ...
+- Data structure helpers : regular expression, strings, keywords, maps, sequences, uuids
 - Logging in clj and cljs with a proxy from cljc
 - Configuration management
 - Translation
