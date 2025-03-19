@@ -1,13 +1,7 @@
-{:deps {com.github.hephaistox/auto-build {:git/sha "c2da9180d515aa63b8a3edf769c6821938af602e"}}
+{:deps {com.github.hephaistox/auto-build {:git/sha "6e9a158ebf50ed9d0291f05c767b056c24508ca5"}}
  :paths ["src"]
  :tasks
- {-uberjar {:doc "Uberjar"
-            :override-builtin true
-            :requires [[auto-build.tasks.uberjar :as build-uberjar]
-                       [auto-build.echo :refer [level1-header]]]
-            :task (-> (build-uberjar/uberjar level1-header "." "target/uberjar" "")
-                      exit)}
-  :requires [[auto-build.os.exit-codes] [auto-build.os.exiting :refer [exit]]]
+ {:requires [[auto-build.os.exit-codes] [auto-build.os.exiting :refer [exit]]]
   bp {:doc "Before push"
       :task (binding [exit (fn [exit-code & _] (when-not (zero? exit-code) exit-code))]
               (-> (or (run 'format)
@@ -66,7 +60,6 @@
   gha {:doc "For github action tests"
        :task (do (shell "bb clj-test test-clj -v") (shell "bb cljs-node-test all -v"))}
   heph-info {:doc "Hephaistox project info"
-             :extra-paths ["env/dev/resources"]
              :requires [[auto-build.tasks.heph-info :as heph-info]
                         [auto-build.echo :refer [level1-header]]]
              :task (-> (heph-info/heph-info level1-header (current-task) ".")
@@ -78,6 +71,5 @@
   repl {:doc "Clojure repl"
         :override-builtin true
         :requires [[auto-build.tasks.repl :as build-repl] [auto-build.echo :refer [level1-header]]]
-        :task
-        (-> (build-repl/repl level1-header "." (current-task) [:build :cljs-deps :test-clj] 7002)
-            exit)}}}
+        :task (-> (build-repl/repl level1-header "." (current-task) [:cljs-deps :test-clj] 7002)
+                  exit)}}}
