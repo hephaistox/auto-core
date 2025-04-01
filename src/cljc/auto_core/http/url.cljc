@@ -1,5 +1,5 @@
 (ns auto-core.http.url
-  "Url management
+  "Parse url
 
   See [lambdaisland.uri](https://cljdoc.org/d/lambdaisland/uri/1.15.125/doc/readme) for useful functions
   And see the [RFC](https://www.ietf.org/rfc/rfc3986.txt) for references"
@@ -14,13 +14,6 @@
   ; :fragment nil}
 )
 
-(defn extract-tld-from-host
-  "Extract the tld of an host from an `url`"
-  [url]
-  (some->> url
-           (re-find #".*(?:\.([a-zA-Z]\w{1,2}))(?::\d{1,4})?$")
-           second))
-
 (def url-delims
   "According to [RFC3986 page 12](https://www.ietf.org/rfc/rfc3986.txt):
    gen-delims  = : / ? #  [ ] @
@@ -28,15 +21,31 @@
   {:gen-delims [":" "/" "?" "#" "[" "]" "@"]
    :sub-delims ["!" "$" "&" "'" "(" ")" "*" "+" "," ";" "="]})
 
-(defn compare-locations
-  "Are `url` from the same location? (apparent server)"
-  [& urls]
-  (apply = (map (comp (juxt :path :query) lambda-uri/uri) urls)))
+(defn parse
+  "Destructuring the `url` into this map:
+  * `user`
+  * `password`
+  * `host`
+  * `port`
+  * `path`
+  * `query`
+  * `fragment`"
+  [url]
+  (lambda-uri/uri url))
 
 (defn parse-queries
   "Parse queries to get the parameters from `url`"
-  [url]
-  (-> url
-      lambda-uri/uri
+  [parsed-url]
+  (-> parsed-url
       :query
       lambda-uri/query-string->map))
+
+(defn extract-tld
+  "Extract the tld from the `url`
+
+  The tld is the top level domain, which is `com` in `hephaistox.com`"
+  [parsed-url]
+  (some->> parsed-url
+           :host
+           (re-find #".*(?:\.([a-zA-Z]\w{1,2}))(?::\d{1,4})?$")
+           second))
