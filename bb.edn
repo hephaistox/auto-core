@@ -1,5 +1,5 @@
-{:deps {com.github.hephaistox/auto-build {:git/sha "6e9a158ebf50ed9d0291f05c767b056c24508ca5"}}
- :paths ["src"]
+{:deps {com.github.hephaistox/auto-build {:git/sha "12a7e7ba0d08e8d5fe45b59964abd6fe2a7e3899"}}
+ :paths []
  :tasks
  {:requires [[auto-build.os.exit-codes] [auto-build.os.exiting :refer [exit]]]
   bp {:doc "Before push"
