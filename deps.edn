@@ -5,7 +5,7 @@
                              :extra-deps {com.cognitect/test-runner
                                           {:git/url "https://github.com/cognitect-labs/test-runner"
                                            :sha "3f288f1f16d167723ad87cc35b1dfee3c1681e10"}}}
-           :cljs-deps {:extra-deps {thheller/shadow-cljs {:mvn/version "2.28.21"}}
+           :cljs-deps {:extra-deps {thheller/shadow-cljs {:mvn/version "2.28.23"}}
                        :extra-paths ["src/cljc" "test/cljc" "test/cljs" "test/resources"]}
            :codox {:exec-args
                    {:description "`auto-core` is about core technical functionalities"
@@ -20,7 +20,7 @@
                       :main-opts
                       ["-m" "cognitect.test-runner" "-r" ".*-test.*" "-d" "test/clj" "test/cljc"]}}
  :deps {babashka/fs {:mvn/version "0.5.24"}
-        babashka/process {:mvn/version "0.5.22"}
+        babashka/process {:mvn/version "0.6.23"}
         com.taoensso/tempura {:mvn/version "1.5.4"}
         com.yetanalytics/colossal-squuid {:mvn/version "0.1.5"}
         danlentz/clj-uuid {:mvn/version "0.2.0"}
