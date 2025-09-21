@@ -51,7 +51,7 @@ jobs:
         run: git diff
       - name: Pushed code should already be formatted
         # See https://github.com/CatChen/check-git-status-action
-        uses: CatChen/check-git-status-action@7ff019ee29f2307dca95397ae225037aa88eb4c7
+        uses: CatChen/check-git-status-action@7ff019ee29f2307dca95397ae225037aa88eb4c7 #v1.4.4
         with:
           fail-if-not-clean: true
           request-changes-if-not-clean: false

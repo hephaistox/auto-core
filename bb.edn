@@ -1,11 +1,13 @@
-{:deps {com.github.hephaistox/auto-build {:git/sha "a8c56c7198405eee422bb70ea47dc7f3c206ad11"}}
+{:deps {com.github.hephaistox/auto-build {:git/sha "a790ef0819657e73803aa613ae74504a18a05d52"}}
  :paths []
  :tasks
  {:requires [[auto-build.os.exit-codes] [auto-build.os.exiting :refer [exit]]]
-  bp {:doc "Before push"
+  bp {:doc "To fail fast before git pushing a version"
+      :requires [[auto-build.echo :refer [level1-header]] [auto-build.tasks.deps :as td]]
       :task (binding [exit (fn [exit-code & _] (when-not (zero? exit-code) exit-code))]
               (-> (or (run 'format)
                       (run 'lint)
+                      (td/task level1-header ".")
                       (binding [*command-line-args* (conj *command-line-args* "all")]
                         (run 'clj-test))
                       (binding [*command-line-args* (conj *command-line-args* "all")]
@@ -22,7 +24,7 @@
                                      (current-task))
                    exit)}
   clj-test
-  {:doc "Test with clj"
+  {:doc "Run clojure test"
    :requires [[auto-build.tasks.clj-test :as build-clj-test]
               [auto-build.echo :refer [level1-header]]]
    :task (->
@@ -41,34 +43,37 @@
               [auto-build.echo :refer [level1-header]]]
    :task (-> (build-cljs-node-test/cljs-node-test level1-header "." (current-task) ["ltest"])
              exit)}
+  copy {:doc "Copy files from source projects (as defined in ext_src.edn)"
+        :requires [[auto-build.tasks.copy :as tc] [auto-build.echo :refer [level1-header]]]
+        :task (tc/run level1-header "ext_src.edn")}
   deploy {:doc "Deploy"
           :requires [[auto-build.tasks.deploy :as task-deploy]
                      [auto-build.echo :refer [level1-header]]]
           :task (-> (task-deploy/deploy level1-header "." "main" (current-task))
                     exit)}
-  deps {:doc "Update deps"
+  deps {:doc "Update deps clojure(script) and npm"
         :task (do (shell "clj -M:antq") (shell "npm upgrade"))}
   docs {:doc "Docs"
         :requires [[auto-build.tasks.docs :as build-docs] [auto-build.echo :refer [level1-header]]]
         :task (-> (build-docs/docs level1-header "." (current-task) "gh-pages" "codox")
                   exit)}
-  format {:doc "Format"
+  format {:doc "Format source code"
           :requires [[auto-build.tasks.formatting :as task-format]
                      [auto-build.echo :refer [level1-header]]]
           :task (-> (task-format/format level1-header "." (current-task))
                     exit)}
-  gha {:doc "For github action tests"
+  gha {:doc "To be run by github action"
        :task (do (shell "bb clj-test test-clj -v") (shell "bb cljs-node-test all -v"))}
   heph-info {:doc "Hephaistox project info"
              :requires [[auto-build.tasks.heph-info :as heph-info]
                         [auto-build.echo :refer [level1-header]]]
              :task (-> (heph-info/heph-info level1-header (current-task) ".")
                        exit)}
-  lint {:doc "Lint"
+  lint {:doc "Lint source code"
         :requires [[auto-build.tasks.lint :as task-lint] [auto-build.echo :refer [level1-header]]]
         :task (-> (task-lint/lint level1-header ["src" "test"] "." (current-task))
                   exit)}
-  repl {:doc "Clojure repl"
+  repl {:doc "Clojure repl based on cider"
         :override-builtin true
         :requires [[auto-build.tasks.repl :as build-repl] [auto-build.echo :refer [level1-header]]]
         :task (-> (build-repl/repl level1-header "." (current-task) [:cljs-deps :test-clj] 7002)
