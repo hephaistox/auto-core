@@ -5,7 +5,7 @@
                              :extra-deps {com.cognitect/test-runner
                                           {:git/url "https://github.com/cognitect-labs/test-runner"
                                            :sha "3f288f1f16d167723ad87cc35b1dfee3c1681e10"}}}
-           :cljs-deps {:extra-deps {thheller/shadow-cljs {:mvn/version "3.1.8"}}
+           :cljs-deps {:extra-deps {thheller/shadow-cljs {:mvn/version "3.2.0"}}
                        :extra-paths ["src/cljc" "test/cljc" "test/cljs" "test/resources"]}
            :codox {:exec-args
                    {:description "`auto-core` is about core technical functionalities"
@@ -19,12 +19,12 @@
            :test-clj {:extra-paths ["test/clj" "test/cljc" "test/resources"]
                       :main-opts
                       ["-m" "cognitect.test-runner" "-r" ".*-test.*" "-d" "test/clj" "test/cljc"]}}
- :deps {babashka/fs {:mvn/version "0.5.26"}
+ :deps {babashka/fs {:mvn/version "0.5.27"}
         babashka/process {:mvn/version "0.6.23"}
         com.taoensso/tempura {:mvn/version "1.5.4"}
         com.yetanalytics/colossal-squuid {:mvn/version "0.1.5"}
         danlentz/clj-uuid {:mvn/version "0.2.0"}
-        http-kit/http-kit {:mvn/version "2.8.0"}
+        http-kit/http-kit {:mvn/version "2.8.1"}
         lambdaisland/uri {:mvn/version "1.19.155"}
         metosin/malli {:mvn/version "0.19.1"}
         org.apache.logging.log4j/log4j-api {:mvn/version "2.25.1"}
